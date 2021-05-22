@@ -17,7 +17,7 @@ public class BasketController {
 	
 	
 	@GetMapping("/baskets")
-	public List<Basket> getAllUsers(){
+	public List<Basket> getAllBaskets(){
 		
 		return basketRepo.findAll();
 		

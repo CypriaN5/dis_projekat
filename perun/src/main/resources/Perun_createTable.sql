@@ -44,5 +44,5 @@ id uuid primary key default uuid_generate_v4(),
 "storeInfo" jsonb not null,
 "createdAt" timestamp not null default now(),
 "updatedAt" timestamp not null default now(),
-"isDeleated" boolean default false
+"isDeleted" boolean default false
 );

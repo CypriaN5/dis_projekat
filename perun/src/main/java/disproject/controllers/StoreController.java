@@ -16,7 +16,7 @@ public class StoreController {
 	private StoreRepository storeRepo;
 	
 	@GetMapping("/stores")
-	public List<Store> getAllUsers(){
+	public List<Store> getAllStores(){
 		
 		return storeRepo.findAll();
 		
