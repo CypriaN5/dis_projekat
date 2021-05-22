@@ -1,0 +1,17 @@
+package disproject.perun;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+
+import disproject.controllers.AppUserController;
+
+@SpringBootApplication
+@ComponentScan(basePackageClasses=AppUserController.class)
+public class PerunApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(PerunApplication.class, args);
+	}
+
+}
