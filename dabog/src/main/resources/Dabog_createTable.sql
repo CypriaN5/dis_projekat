@@ -17,7 +17,7 @@ id uuid primary key default uuid_generate_v4(),
 "cardType" varchar(250) not null,
 "cardBinNumber" varchar(250) not null,
 "lastFourDigits" varchar(250) not null,
-"isDeleated" boolean default false,
+"isDeleted" boolean default false,
 "createdAt" timestamp not null default now(),
 "updatedAt" timestamp not null default now()
 )
