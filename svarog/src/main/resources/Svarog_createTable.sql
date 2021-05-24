@@ -8,7 +8,7 @@ create table "Vendor" (
 id uuid primary key default uuid_generate_v4(),
 "simpleVendorId" integer not null,
 "vendorName" varchar(250) unique not null,
-"vednorInfo" jsonb not null,
+"vendorInfo" jsonb not null,
 "representativeInfo" jsonb not null,
 "createdAt" timestamp not null default now(),
 "updatedAt" timestamp not null default now()
