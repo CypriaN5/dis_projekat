@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -20,6 +21,7 @@ import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 public class Basket {
 	
 	@Id
+	@GeneratedValue
 	private UUID id;
 	
 	@Column(name="\"appUserId\"")
@@ -33,6 +35,9 @@ public class Basket {
 	
 	@Column(name="\"paymentRefId\"")
 	private String paymentRefId;
+	
+	@Column(name="\"storeId\"")
+	private Integer storeId;
 	
 	@Column(name="\"totalPrice\"")
 	private Integer totalPrice;
@@ -135,6 +140,14 @@ public class Basket {
 
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public Integer getStoreId() {
+		return storeId;
+	}
+
+	public void setStoreId(Integer storeId) {
+		this.storeId = storeId;
 	}
 	
 	

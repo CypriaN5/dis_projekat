@@ -7,7 +7,7 @@ drop table if exists "Store" cascade;
 
 create table "AppUser" (
 id uuid primary key default uuid_generate_v4(),
-email varchar(250) not null,
+email varchar(250) unique not null,
 "firstName" varchar(200) not null,
 "lastName" varchar(200) not null,
 "createdAt" timestamp not null default now(),

@@ -1,11 +1,11 @@
 package disproject.perun.models;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -20,6 +20,7 @@ import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 public class Store {
 	
 	@Id
+	@GeneratedValue
 	private UUID id;
 	
 	@Column(name="\"simpleStoreId\"")

@@ -1,5 +1,6 @@
 package disproject.controllers;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -9,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import disproject.perun.models.AppUser;
@@ -42,6 +45,19 @@ public class AppUserController {
 		}
 		
 		return new ResponseEntity<>(appUser, HttpStatus.OK);
+	}
+	
+	@PostMapping("/app-user")
+	public ResponseEntity<Object> addUser(@RequestBody AppUser user) {
+		
+		user.setCreatedAt(LocalDateTime.now());
+		user.setUpdatedAt(LocalDateTime.now());
+		
+		try {
+			return new ResponseEntity<>(appUserRepo.save(user), HttpStatus.OK) ;
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
 
 }
