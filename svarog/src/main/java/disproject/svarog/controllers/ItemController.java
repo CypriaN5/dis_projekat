@@ -1,9 +1,14 @@
 package disproject.svarog.controllers;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import disproject.svarog.models.Item;
@@ -16,10 +21,27 @@ public class ItemController {
 	private ItemRepository itemRepo;
 	
 	@GetMapping("/items")
-	public List<Item> getAllItems(){
+	public ResponseEntity<Object> getAllItems() {
+		List<Item> items = itemRepo.findAll();
 		
-		return itemRepo.findAll();
+		if (!items.isEmpty()) {
+			return new ResponseEntity<>(items, HttpStatus.OK);
+		}
 		
+		return new ResponseEntity<>("NoItemsFound", HttpStatus.NOT_FOUND);
 	}
+	
+	@GetMapping("/items/{id}")
+	public ResponseEntity<Object> getOne(@PathVariable UUID id) {
+		
+		Optional<Item> item = itemRepo.findById(id);
+		
+		if (!item.isPresent()) {
+			return new ResponseEntity<>("ItemNotFound", HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<>(item, HttpStatus.OK);
+	}
+
 	
 }
