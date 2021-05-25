@@ -9,5 +9,5 @@ import disproject.svarog.models.Item;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, UUID> {
-
+	
 }

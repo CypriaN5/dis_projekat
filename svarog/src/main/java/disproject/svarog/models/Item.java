@@ -1,23 +1,41 @@
 package disproject.svarog.models;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Entity
 @Table(name="\"Item\"", schema="public")
-public class Item {
+public class Item implements Serializable {
 
 	@Id
 	@GeneratedValue
 	private UUID id;
 	
-	private String vendor;
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(
+	        name = "vendor",
+	        referencedColumnName = "\"vendorName\""
+	    )
+	@JsonIgnore
+	private Vendor vendor;
+	
+	@JsonInclude()
+	@Transient
+	private String vendorName;
 	
 	@Column(name="\"ean13\"")
 	private String ean13;
@@ -45,7 +63,7 @@ public class Item {
 		super();
 	}
 
-	public Item(UUID id, String vendor, String ean13, String itemName, Integer unitPrice, boolean discounted,
+	public Item(UUID id, Vendor vendor, String ean13, String itemName, Integer unitPrice, boolean discounted,
 			Integer discountAmount, LocalDateTime createdAt, LocalDateTime updatedAt) {
 		super();
 		this.id = id;
@@ -67,12 +85,20 @@ public class Item {
 		this.id = id;
 	}
 
-	public String getVendor() {
+	public Vendor getVendor() {
 		return vendor;
 	}
 
-	public void setVendor(String vendor) {
+	public void setVendor(Vendor vendor) {
 		this.vendor = vendor;
+	}
+	
+	public String getVendorName() {
+		return vendor.getVendorName();
+	}
+
+	public void setVendorName(Vendor vendor) {
+		this.vendorName = vendor.getVendorName();
 	}
 
 	public String getEan13() {

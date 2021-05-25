@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import disproject.svarog.models.Item;
 import disproject.svarog.models.Vendor;
 import disproject.svarog.repositories.VendorRepository;
 
@@ -23,15 +24,16 @@ public class VendorController {
 	@Autowired
 	private VendorRepository vendorRepo;
 	
+	
 	@GetMapping("/vendors")
 	public ResponseEntity<Object> getAllVendors() {
 		List<Vendor> vendors = vendorRepo.findAll();
 		
-		if (!vendors.isEmpty()) {
-			return new ResponseEntity<>(vendors, HttpStatus.OK);
+		if (vendors.isEmpty()) {
+			return new ResponseEntity<>("NoVendorsFound", HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<>("NoVendorsFound", HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(vendors, HttpStatus.OK);
 	}
 	
 	@GetMapping("/vendors/{id}")
@@ -44,6 +46,24 @@ public class VendorController {
 		}
 		
 		return new ResponseEntity<>(vendor, HttpStatus.OK);
+	}
+	
+	//Get items for a vendor
+	@GetMapping("/vendors/{id}/items")
+	public ResponseEntity<Object> getItemsForVendor(@PathVariable UUID id){
+		Optional<Vendor> vendor = vendorRepo.findById(id);
+		
+		if (!vendor.isPresent()) {
+			return new ResponseEntity<>("VendorNotFound", HttpStatus.NOT_FOUND);
+		}
+		
+		List<Item> vendorItems = vendor.get().getItems();
+		
+		if (vendorItems.isEmpty()) {
+			return new ResponseEntity<>("NoItemsFoundForVendor", HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<>(vendorItems, HttpStatus.OK);
 	}
 	
 	@PostMapping("/vendor") 
@@ -61,4 +81,7 @@ public class VendorController {
 			return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	
+	
 }

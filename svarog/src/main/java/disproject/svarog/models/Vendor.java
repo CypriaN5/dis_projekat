@@ -1,22 +1,26 @@
 package disproject.svarog.models;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 
 @Entity
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @Table(name="\"Vendor\"", schema="public")
-public class Vendor {
+public class Vendor implements Serializable {
 	
 	@Id
 	private UUID id;
@@ -40,6 +44,10 @@ public class Vendor {
 	
 	@Column(name="\"updatedAt\"")
 	private LocalDateTime updatedAt;
+	
+	@OneToMany(mappedBy="vendor")
+	@JsonIgnore
+	private List<Item> items;
 
 	public Vendor() {
 		super();
@@ -112,5 +120,15 @@ public class Vendor {
 	public void setUpdatedAt(LocalDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+
+	public List<Item> getItems() {
+		return items;
+	}
+
+	public void setItems(List<Item> items) {
+		this.items = items;
+	}
+	
+	
 	
 }
