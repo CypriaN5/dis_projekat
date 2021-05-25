@@ -1,5 +1,6 @@
 package disproject.svarog.controllers;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -9,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import disproject.svarog.models.Vendor;
@@ -41,5 +44,21 @@ public class VendorController {
 		}
 		
 		return new ResponseEntity<>(vendor, HttpStatus.OK);
+	}
+	
+	@PostMapping("/vendor") 
+	public ResponseEntity<Object> addVendor(@RequestBody Vendor vendor){
+		
+		UUID customId = UUID.fromString("00000000-0000-0000-0000-00000000" + vendor.getSimpleVendorId());
+		vendor.setId(customId);
+		
+		vendor.setCreatedAt(LocalDateTime.now());
+		vendor.setUpdatedAt(LocalDateTime.now());
+		
+		try {
+			return new ResponseEntity<>(vendorRepo.save(vendor), HttpStatus.OK) ;
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+		}
 	}
 }

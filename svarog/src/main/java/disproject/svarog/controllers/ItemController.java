@@ -42,6 +42,16 @@ public class ItemController {
 		
 		return new ResponseEntity<>(item, HttpStatus.OK);
 	}
+	
+	//POSTPONED, 
+	/*
+	 * @PostMapping("/item") public ResponseEntity<Object> addItem(@RequestBody Item
+	 * item){
+	 * 
+	 * try { return new ResponseEntity<>(itemRepo.save(item), HttpStatus.OK) ; }
+	 * catch (Exception e) { return new ResponseEntity<>(e.getLocalizedMessage(),
+	 * HttpStatus.BAD_REQUEST); } }
+	 */
 
 	
 }

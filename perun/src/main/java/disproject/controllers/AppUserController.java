@@ -48,7 +48,7 @@ public class AppUserController {
 	}
 	
 	@PostMapping("/app-user")
-	public ResponseEntity<Object> addUser(@RequestBody AppUser user) {
+	public ResponseEntity<Object> addAppUser(@RequestBody AppUser user) {
 		
 		user.setCreatedAt(LocalDateTime.now());
 		user.setUpdatedAt(LocalDateTime.now());

@@ -20,7 +20,6 @@ import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 public class Store {
 	
 	@Id
-	@GeneratedValue
 	private UUID id;
 	
 	@Column(name="\"simpleStoreId\"")
