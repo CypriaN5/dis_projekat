@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,13 +49,37 @@ public class AppUserController {
 	}
 	
 	@PostMapping("/app-user")
-	public ResponseEntity<Object> addAppUser(@RequestBody AppUser user) {
+	public ResponseEntity<Object> addAppUser(@RequestBody AppUser appUser) {
 		
-		user.setCreatedAt(LocalDateTime.now());
-		user.setUpdatedAt(LocalDateTime.now());
+		appUser.setCreatedAt(LocalDateTime.now());
+		appUser.setUpdatedAt(LocalDateTime.now());
 		
 		try {
-			return new ResponseEntity<>(appUserRepo.save(user), HttpStatus.OK) ;
+			return new ResponseEntity<>(appUserRepo.save(appUser), HttpStatus.OK) ;
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PutMapping("/app-user/{id}")
+	public ResponseEntity<Object> updateAppUser(@PathVariable UUID id, @RequestBody AppUser appUserTemp) {
+		
+		Optional<AppUser> appUserOptional = appUserRepo.findById(id);
+		
+		if (!appUserOptional.isPresent()) {
+			return new ResponseEntity<>("AppUserNotFound", HttpStatus.NOT_FOUND);
+		}
+		
+		AppUser appUser = appUserOptional.get();
+		
+		appUser.setEmail(appUserTemp.getEmail());
+		appUser.setFirstName(appUserTemp.getFirstName());
+		appUser.setLastName(appUserTemp.getLastName());
+		
+		appUser.setUpdatedAt(LocalDateTime.now());
+		
+		try {
+			return new ResponseEntity<>(appUserRepo.save(appUser), HttpStatus.OK) ;
 		} catch (Exception e) {
 			return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
 		}

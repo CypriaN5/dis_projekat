@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -51,6 +52,8 @@ public class BasketController {
 	@PostMapping("/basket")
 	public ResponseEntity<Object> addBasket(@RequestBody Basket basket) {
 		
+		//TODO implement fetching items from svarog and then create a basket
+		
 		basket.setClosed(false);
 		basket.setPaymentRefId("BEDTEST");
 		
@@ -62,6 +65,37 @@ public class BasketController {
 		}
 		
 		basket.setCreatedAt(LocalDateTime.now());
+		basket.setUpdatedAt(LocalDateTime.now());
+		
+		try {
+			return new ResponseEntity<>(basketRepo.save(basket), HttpStatus.OK) ;
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PutMapping("/basket/{id}")
+	public ResponseEntity<Object> updateBasket(@PathVariable UUID id, @RequestBody Basket basketTemp) {
+		
+		Optional<Basket> basketOptional = basketRepo.findById(id);
+		
+		if (!basketOptional.isPresent()) {
+			return new ResponseEntity<>("BasketNotFound", HttpStatus.NOT_FOUND);
+		}
+		
+		Basket basket = basketOptional.get();
+		
+		List<Item> newItems = basketTemp.getItems();
+		
+		basket.setItems(basketTemp.getItems());
+		
+		basket.setTotalPrice(0);
+		for (Item item : newItems) {
+			basket.setTotalPrice(basket.getTotalPrice() + item.getTotalPrice());
+		}
+		
+		basket.setStoreId(basketTemp.getStoreId());
+		
 		basket.setUpdatedAt(LocalDateTime.now());
 		
 		try {
