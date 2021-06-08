@@ -1,4 +1,4 @@
-package disproject.controllers;
+package disproject.perun.controllers;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -97,6 +97,7 @@ public class StoreController {
 		}
 		
 		store.get().setDeleted(true);
+		store.get().setUpdatedAt(LocalDateTime.now());
 		
 		try {
 			return new ResponseEntity<>(storeRepo.save(store.get()), HttpStatus.OK) ;

@@ -1,4 +1,4 @@
-package disproject.controllers;
+package disproject.perun.controllers;
 
 import java.time.LocalDateTime;
 import java.util.List;

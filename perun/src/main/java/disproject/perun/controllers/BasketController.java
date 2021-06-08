@@ -1,4 +1,4 @@
-package disproject.controllers;
+package disproject.perun.controllers;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -82,6 +82,8 @@ public class BasketController {
 		if (!basketOptional.isPresent()) {
 			return new ResponseEntity<>("BasketNotFound", HttpStatus.NOT_FOUND);
 		}
+		
+		//TODO implement fetching items from svarog and then create a basket
 		
 		Basket basket = basketOptional.get();
 		

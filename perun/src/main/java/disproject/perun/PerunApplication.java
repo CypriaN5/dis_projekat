@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-import disproject.controllers.AppUserController;
+import disproject.perun.controllers.AppUserController;
 
 @SpringBootApplication
 @ComponentScan(basePackageClasses=AppUserController.class)
