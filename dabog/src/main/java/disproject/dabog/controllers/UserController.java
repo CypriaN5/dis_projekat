@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import disproject.dabog.models.Card;
 import disproject.dabog.models.User;
 import disproject.dabog.repositories.UserRepository;
 
@@ -45,6 +46,27 @@ public class UserController {
 		}
 		
 		return new ResponseEntity<>(user, HttpStatus.OK);
+	}
+	
+	//Get cards for user
+	@GetMapping("/users/{id}/cards")
+	public ResponseEntity<Object> getCardsforUser(@PathVariable UUID id) {
+		
+		Optional<User> user = userRepo.findById(id);
+		
+		if (!user.isPresent()) {
+			return new ResponseEntity<>("UserNotFound", HttpStatus.NOT_FOUND);
+		}
+		
+		List<Card> cards = user.get().getCards();
+		
+		cards.removeIf(card -> card.isDeleted() == true);
+		
+		if (cards.isEmpty()) {
+			return new ResponseEntity<>("NoCardsFoundForUser", HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<>(cards, HttpStatus.OK);
 	}
 	
 	@PostMapping("/user") 

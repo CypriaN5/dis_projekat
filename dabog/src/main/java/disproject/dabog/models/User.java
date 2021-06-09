@@ -1,12 +1,16 @@
 package disproject.dabog.models;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="\"User\"")
@@ -22,6 +26,10 @@ public class User {
 	
 	@Column(name="\"updatedAt\"")
 	private LocalDateTime updatedAt;
+	
+	@OneToMany(mappedBy="user")
+	@JsonIgnore
+	private List<Card> cards;
 
 	public User() {
 		super();
@@ -67,6 +75,12 @@ public class User {
 		this.updatedAt = updatedAt;
 	}
 	
-	
+	public List<Card> getCards() {
+		return cards;
+	}
+
+	public void setCards(List<Card> cards) {
+		this.cards = cards;
+	}
 	
 }

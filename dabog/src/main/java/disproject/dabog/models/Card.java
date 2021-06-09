@@ -5,9 +5,16 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Entity
 @Table(name="\"Card\"")
@@ -17,7 +24,16 @@ public class Card {
 	@GeneratedValue
 	private UUID id;
 	
-	@Column(name="\"userId\"")
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(
+	        name = "\"userId\"",
+	        referencedColumnName = "\"id\""
+	    )
+	@JsonIgnore
+	private User user;
+	
+	@JsonInclude()
+	@Transient
 	private UUID userId;
 	
 	@Column(name="\"cardType\"")
@@ -42,11 +58,12 @@ public class Card {
 		super();
 	}
 
-	public Card(UUID id, UUID userId, String cardType, String cardBinNumber, String lastFourDigits, boolean isDeleted,
+	public Card(UUID id, User user, String cardType, String cardBinNumber, String lastFourDigits, boolean isDeleted,
 			LocalDateTime createdAt, LocalDateTime updatedAt) {
 		super();
 		this.id = id;
-		this.userId = userId;
+		this.user = user;
+		//this.userId = userId;
 		this.cardType = cardType;
 		this.cardBinNumber = cardBinNumber;
 		this.lastFourDigits = lastFourDigits;
@@ -63,12 +80,21 @@ public class Card {
 		this.id = id;
 	}
 
-	public UUID getUserId() {
-		return userId;
+	
+	public UUID getUserId() { 
+		 return user.getId();
+	}
+	
+	public void setUserId(User user) { 
+		 this.userId = user.getId(); 
+	}
+	 
+	public User getUser() {
+		return user;
 	}
 
-	public void setUserId(UUID userId) {
-		this.userId = userId;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public String getCardType() {
