@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import disproject.perun.models.Basket;
 import disproject.perun.models.Item;
+import disproject.perun.proxies.SvarogProxy;
 import disproject.perun.repositories.BasketRepository;
 
 @RestController
@@ -24,6 +25,9 @@ public class BasketController {
 
 	@Autowired
 	private BasketRepository basketRepo;
+	
+	@Autowired
+	private SvarogProxy svarogProxy;
 	
 	
 	@GetMapping("/baskets")
@@ -53,6 +57,8 @@ public class BasketController {
 	public ResponseEntity<Object> addBasket(@RequestBody Basket basket) {
 		
 		//TODO implement fetching items from svarog and then create a basket
+		List<Item> itemsFromSvarog = svarogProxy.retrieveItems(basket.getItems());
+		
 		
 		basket.setClosed(false);
 		basket.setPaymentRefId("BEDTEST");

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,7 +46,7 @@ public class ItemController {
 		return new ResponseEntity<>(item, HttpStatus.OK);
 	}
 	
-	@GetMapping("/items/perun")
+	@PostMapping("/items/perun")
 	public ResponseEntity<Object> getItemsByEan(@RequestBody List<Item> itemsTemp) {
 		
 		List<String> eansToSearch = new ArrayList<String>();
@@ -55,6 +56,14 @@ public class ItemController {
 		}
 		
 		List<Item> items = itemRepo.findItemsByEan(eansToSearch);
+		
+		for(Item item1 : items){
+			   for(Item item2: itemsTemp){
+			       if(item1.getEan13().equals(item2.getEan13())){
+			    	   item1.setQuantity(item2.getQuantity());
+			       }
+			   }
+		}
 		
 		return new ResponseEntity<>(items, HttpStatus.OK);
 		
