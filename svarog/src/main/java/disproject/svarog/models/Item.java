@@ -57,8 +57,11 @@ public class Item implements Serializable {
 	@Column(name="\"updatedAt\"")
 	private LocalDateTime updatedAt;
 
+	@JsonInclude()
+	@Transient
+	private Integer quantity = 1;
 	
-	
+
 	public Item() {
 		super();
 	}
@@ -157,5 +160,8 @@ public class Item implements Serializable {
 		this.updatedAt = updatedAt;
 	}
 	
+	public Integer getQuantity() {
+		return quantity;
+	}
 	
 }

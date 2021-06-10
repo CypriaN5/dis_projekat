@@ -1,5 +1,6 @@
 package disproject.svarog.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import disproject.svarog.models.Item;
@@ -41,6 +43,21 @@ public class ItemController {
 		}
 		
 		return new ResponseEntity<>(item, HttpStatus.OK);
+	}
+	
+	@GetMapping("/items/perun")
+	public ResponseEntity<Object> getItemsByEan(@RequestBody List<Item> itemsTemp) {
+		
+		List<String> eansToSearch = new ArrayList<String>();
+		
+		for (Item item : itemsTemp) {
+			eansToSearch.add(item.getEan13());
+		}
+		
+		List<Item> items = itemRepo.findItemsByEan(eansToSearch);
+		
+		return new ResponseEntity<>(items, HttpStatus.OK);
+		
 	}
 	
 	//POSTPONED, 
