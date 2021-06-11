@@ -61,6 +61,10 @@ public class Item implements Serializable {
 	@Transient
 	private Integer quantity = 1;
 	
+	@JsonInclude()
+	@Transient
+	private Integer totalPrice;
+	
 
 	public Item() {
 		super();
@@ -168,4 +172,11 @@ public class Item implements Serializable {
 		this.quantity = quantity;
 	}
 	
+	public Integer getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(Integer totalPrice) {
+		this.totalPrice = totalPrice;
+	}
 }

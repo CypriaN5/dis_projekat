@@ -54,13 +54,26 @@ public class BasketController {
 	}
 	
 	@PostMapping("/basket")
-	public ResponseEntity<Object> addBasket(@RequestBody Basket basket) {
+	public ResponseEntity<Object> addBasket(@RequestBody Basket tempBasket) {
+
+		Basket basket = new Basket();
+		if (tempBasket.getId() != null) {
+			basket = basketRepo.findById(tempBasket.getId()).get();
+			basket.setStoreId(tempBasket.getStoreId());
+			basket.setItems(tempBasket.getItems());
+			basket.setUpdatedAt(LocalDateTime.now());
+		} else {
+			basket = tempBasket;
+			basket.setItems(tempBasket.getItems());
+			basket.setCreatedAt(LocalDateTime.now());
+			basket.setUpdatedAt(LocalDateTime.now());
+		}
 		
-		//TODO implement fetching items from svarog and then create a basket
+		// Fetch items from Svarog and then populate/calculate  basket
 		List<Item> itemsFromSvarog = svarogProxy.retrieveItems(basket.getItems());
 		
+		basket.setItems(itemsFromSvarog);
 		
-		basket.setClosed(false);
 		basket.setPaymentRefId("BEDTEST");
 		
 		List<Item> items = basket.getItems();
@@ -69,9 +82,6 @@ public class BasketController {
 		for (Item item : items) {
 			basket.setTotalPrice(basket.getTotalPrice() + item.getTotalPrice());
 		}
-		
-		basket.setCreatedAt(LocalDateTime.now());
-		basket.setUpdatedAt(LocalDateTime.now());
 		
 		try {
 			return new ResponseEntity<>(basketRepo.save(basket), HttpStatus.OK) ;

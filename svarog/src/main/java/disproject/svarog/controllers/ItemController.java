@@ -63,7 +63,10 @@ public class ItemController {
 			    	   item1.setQuantity(item2.getQuantity());
 			       }
 			   }
+			   item1.setTotalPrice(item1.getUnitPrice() * item1.getQuantity());
 		}
+		
+		
 		
 		return new ResponseEntity<>(items, HttpStatus.OK);
 		
