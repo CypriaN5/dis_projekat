@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import disproject.perun.models.AppUser;
+import disproject.perun.proxies.DabogProxy;
 import disproject.perun.repositories.AppUserRepository;
 
 @RestController
@@ -23,6 +24,9 @@ public class AppUserController {
 	
 	@Autowired
 	private AppUserRepository appUserRepo;
+	
+	@Autowired
+	private DabogProxy dabogProxy;
 
 	
 	@GetMapping("/app-users")
@@ -55,7 +59,14 @@ public class AppUserController {
 		appUser.setUpdatedAt(LocalDateTime.now());
 		
 		try {
-			return new ResponseEntity<>(appUserRepo.save(appUser), HttpStatus.OK) ;
+			appUserRepo.save(appUser);
+			
+			AppUser dabogAppUser = new AppUser();
+			dabogAppUser.setId(appUser.getId());
+			dabogAppUser.setEmail(appUser.getEmail());
+			dabogProxy.addUser(dabogAppUser);
+			
+			return new ResponseEntity<>(appUser, HttpStatus.OK) ;
 		} catch (Exception e) {
 			return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
 		}

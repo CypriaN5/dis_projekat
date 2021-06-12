@@ -72,8 +72,6 @@ public class UserController {
 	@PostMapping("/user") 
 	public ResponseEntity<Object> addUser(@RequestBody User user){
 		
-		//TODO change ID generation to take on value from Perun appUserID
-		user.setId(UUID.randomUUID());
 		
 		user.setCreatedAt(LocalDateTime.now());
 		user.setUpdatedAt(LocalDateTime.now());
