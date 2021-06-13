@@ -1,6 +1,7 @@
 package disproject.perun.controllers;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -17,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import disproject.perun.models.Basket;
 import disproject.perun.models.Item;
+import disproject.perun.models.ErrorItem;
 import disproject.perun.proxies.SvarogProxy;
 import disproject.perun.repositories.BasketRepository;
+
 
 @RestController
 public class BasketController {
@@ -72,7 +75,24 @@ public class BasketController {
 		// Fetch items from Svarog and then populate/calculate  basket
 		List<Item> itemsFromSvarog = svarogProxy.retrieveItems(basket.getItems());
 		
+		List<ErrorItem> errorItems = new ArrayList<ErrorItem>();
+		
+		List<String> knownEans = new ArrayList<String>();
+		
+		for (Item item : itemsFromSvarog) {
+			knownEans.add(item.getEan13());
+		}
+		
+		for (Item itemToCheck : basket.getItems()) {
+			if (!knownEans.contains(itemToCheck.getEan13())) {
+				ErrorItem errorItem = new ErrorItem(itemToCheck.getEan13(), "Unknown item");
+				errorItems.add(errorItem);
+			}
+		}
+		
 		basket.setItems(itemsFromSvarog);
+		
+		basket.setErrors(errorItems);
 		
 		basket.setPaymentRefId("BEDTEST");
 		

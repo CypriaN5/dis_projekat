@@ -8,10 +8,8 @@ public class Item implements Serializable {
 	private String itemName;
 	private Integer quantity;
 	private Integer unitPrice;
-	private Integer totalPrice;
-	
-	
-	
+	private Integer totalPrice;	
+
 	public Item() {
 		super();
 	}
@@ -63,7 +61,6 @@ public class Item implements Serializable {
 
 	public void setTotalPrice(Integer totalPrice) {
 		this.totalPrice = totalPrice;
-	}
-	
+	}	
 	
 }

@@ -50,6 +50,10 @@ public class Basket {
 	
 	@Column(name="\"updatedAt\"")
 	private LocalDateTime updatedAt;
+	
+	@Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+	private List<ErrorItem> errors;
 
 	
 	public Basket() {
@@ -150,7 +154,13 @@ public class Basket {
 		this.storeId = storeId;
 	}
 	
-	
+	public List<ErrorItem> getErrors() {
+		return errors;
+	}
+
+	public void setErrors(List<ErrorItem> errors) {
+		this.errors = errors;
+	}
 
 }
 
