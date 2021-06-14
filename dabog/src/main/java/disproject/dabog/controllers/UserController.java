@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import disproject.dabog.models.Card;
 import disproject.dabog.models.User;
+import disproject.dabog.repositories.CardRepository;
 import disproject.dabog.repositories.UserRepository;
 
 @RestController
@@ -24,6 +25,9 @@ public class UserController {
 
 	@Autowired
 	private UserRepository userRepo;
+	
+	@Autowired
+	private CardRepository cardRepo;
 	
 	@GetMapping("/users")
 	public ResponseEntity<Object> getAllUsers() {
@@ -103,4 +107,26 @@ public class UserController {
 			return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	//post a card for a user
+	@PostMapping("/user/{id}/card") 
+	public ResponseEntity<Object> postCardForUser(@PathVariable UUID id, @RequestBody Card card){
+		
+		Optional<User> user = userRepo.findById(id);
+		if (!user.isPresent()) {
+			return new ResponseEntity<>("UserNotFound", HttpStatus.NOT_FOUND);
+		}
+		
+		card.setUser(user.get());
+		card.setDeleted(false);
+		card.setCreatedAt(LocalDateTime.now());
+		card.setUpdatedAt(LocalDateTime.now());
+		
+		try {
+			return new ResponseEntity<>(cardRepo.save(card), HttpStatus.OK) ;
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 }
