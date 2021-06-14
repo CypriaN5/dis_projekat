@@ -72,6 +72,10 @@ public class BasketController {
 			basket.setUpdatedAt(LocalDateTime.now());
 		}
 		
+		if (basket.isClosed() == true) {
+			return new ResponseEntity<>("BasketIsClosed", HttpStatus.BAD_REQUEST);
+		}
+		
 		// Fetch items from Svarog and then populate/calculate  basket
 		List<Item> itemsFromSvarog = svarogProxy.retrieveItems(basket.getItems());
 		
@@ -94,13 +98,16 @@ public class BasketController {
 		
 		basket.setErrors(errorItems);
 		
-		basket.setPaymentRefId("BEDTEST");
-		
 		List<Item> items = basket.getItems();
 		
 		basket.setTotalPrice(0);
 		for (Item item : items) {
 			basket.setTotalPrice(basket.getTotalPrice() + item.getTotalPrice());
+		}
+		
+		if (basket.getPaymentRefId() == null) {
+			int nextPaymentRef = basketRepo.getNextPaymentRef();
+			basket.setPaymentRefId("PR"+nextPaymentRef);
 		}
 		
 		try {
@@ -113,13 +120,13 @@ public class BasketController {
 	@PutMapping("/basket/{id}")
 	public ResponseEntity<Object> updateBasket(@PathVariable UUID id, @RequestBody Basket basketTemp) {
 		
+		//not fully developed
+		
 		Optional<Basket> basketOptional = basketRepo.findById(id);
 		
 		if (!basketOptional.isPresent()) {
 			return new ResponseEntity<>("BasketNotFound", HttpStatus.NOT_FOUND);
 		}
-		
-		//TODO implement fetching items from svarog and then create a basket
 		
 		Basket basket = basketOptional.get();
 		
@@ -141,6 +148,34 @@ public class BasketController {
 		} catch (Exception e) {
 			return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
 		}
+	}
+
+
+	//API call to close basket from dabog
+	@PutMapping("/basket/{id}/close")
+	public ResponseEntity<Object> closeBasket(@PathVariable UUID id) {
+		
+		Optional<Basket> basketOptional = basketRepo.findById(id);
+		
+		if (!basketOptional.isPresent()) {
+			return new ResponseEntity<>("BasketNotFound", HttpStatus.NOT_FOUND);
+		}
+		
+		Basket basket = basketOptional.get();
+		
+		if (basket.isClosed() == true) {
+			return new ResponseEntity<>("BasketAlreadyClosed", HttpStatus.BAD_REQUEST);
+		}
+		
+		basket.setClosed(true);
+		
+		try {
+			basketRepo.save(basket);
+			return new ResponseEntity<>("success", HttpStatus.OK) ;
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
+		}
+		
 	}
 	
 }
