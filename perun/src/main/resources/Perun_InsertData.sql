@@ -60,7 +60,7 @@ values ('964f5532-e63c-441b-8289-322d9a0f1cb6', '[
         "totalPrice": 250
     }
 ]',
-'BID000000109', 1002, 490);
+'PR01DB', 1002, 490);
 insert into "Basket" ("appUserId", "items", "paymentRefId", "storeId", "totalPrice") 
 values ('aa2daf27-7bf8-4b1c-ad3e-5f6873a8351a', '[
     {
@@ -78,7 +78,7 @@ values ('aa2daf27-7bf8-4b1c-ad3e-5f6873a8351a', '[
         "totalPrice": 160
     }
 ]',
-'BID000000115', 1003, 460);
+'PR02DB', 1003, 460);
 insert into "Basket" ("appUserId", "items", "paymentRefId", "storeId", "totalPrice") 
 values ('e107158d-5730-4f68-8f5b-27485f1b4586', '[
     {
@@ -96,4 +96,4 @@ values ('e107158d-5730-4f68-8f5b-27485f1b4586', '[
         "totalPrice": 160
     }
 ]',
-'BID000000219', 1004, 305);
+'PR03DB', 1004, 305);

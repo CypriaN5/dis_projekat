@@ -1,9 +1,15 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+drop sequence if exists paymentrefid;
+
 drop table if exists "AppUser" cascade;
 drop table if exists "Basket" cascade;
 drop table if exists "Transactions" cascade;
 drop table if exists "Store" cascade;
+
+create sequence paymentrefid
+increment by 1
+start with 100000;
 
 create table "AppUser" (
 id uuid primary key default uuid_generate_v4(),
