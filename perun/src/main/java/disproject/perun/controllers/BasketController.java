@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import disproject.perun.models.Basket;
-import disproject.perun.models.Item;
 import disproject.perun.models.ErrorItem;
+import disproject.perun.models.Item;
 import disproject.perun.proxies.SvarogProxy;
 import disproject.perun.repositories.BasketRepository;
 
@@ -152,10 +153,10 @@ public class BasketController {
 
 
 	//API call to close basket from dabog
-	@PutMapping("/basket/{id}/close")
-	public ResponseEntity<Object> closeBasket(@PathVariable UUID id) {
+	@PostMapping("/basket/close")
+	public ResponseEntity<Object> closeBasket(@RequestParam String paymentRefId) {
 		
-		Optional<Basket> basketOptional = basketRepo.findById(id);
+		Optional<Basket> basketOptional = basketRepo.findBasketByPaymentRefId(paymentRefId);
 		
 		if (!basketOptional.isPresent()) {
 			return new ResponseEntity<>("BasketNotFound", HttpStatus.NOT_FOUND);
@@ -168,10 +169,10 @@ public class BasketController {
 		}
 		
 		basket.setClosed(true);
+		basket.setUpdatedAt(LocalDateTime.now());
 		
 		try {
-			basketRepo.save(basket);
-			return new ResponseEntity<>("success", HttpStatus.OK) ;
+			return new ResponseEntity<>(basketRepo.save(basket), HttpStatus.OK) ;
 		} catch (Exception e) {
 			return new ResponseEntity<>(e.getLocalizedMessage(), HttpStatus.BAD_REQUEST);
 		}

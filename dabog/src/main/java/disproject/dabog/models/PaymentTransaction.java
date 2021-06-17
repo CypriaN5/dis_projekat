@@ -60,6 +60,9 @@ public class PaymentTransaction {
 	@Column(name="\"amount\"")
 	private Integer amount;
 	
+	@Column(name="\"currency\"")
+	private String currency;
+	
 	@Type(type = "jsonb")
     @Column(name="\"invoiceData\"", columnDefinition = "jsonb")
 	private List<Object> invoiceData;
@@ -70,7 +73,6 @@ public class PaymentTransaction {
 	@Column(name="\"updatedAt\"")
 	private LocalDateTime updatedAt;
 
-	
 	public PaymentTransaction() {
 		super();
 	}
@@ -159,7 +161,14 @@ public class PaymentTransaction {
 	public void setAmount(Integer amount) {
 		this.amount = amount;
 	}
+	
+	public String getCurrency() {
+		return currency;
+	}
 
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
 
 	public List<Object> getInvoiceData() {
 		return invoiceData;

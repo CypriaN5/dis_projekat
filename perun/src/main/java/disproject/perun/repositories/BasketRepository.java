@@ -1,5 +1,6 @@
 package disproject.perun.repositories;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,5 +14,7 @@ public interface BasketRepository extends JpaRepository<Basket, UUID> {
 
 	@Query(value = "SELECT nextval('public.paymentrefid')", nativeQuery = true)
 	public Integer getNextPaymentRef();
+	
+	public Optional<Basket> findBasketByPaymentRefId(String paymentRefId);
 	
 }

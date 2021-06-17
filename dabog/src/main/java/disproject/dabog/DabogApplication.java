@@ -2,15 +2,20 @@ package disproject.dabog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 
+import disproject.dabog.models.PaymentTransaction;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+@EnableFeignClients
 @SpringBootApplication
 @EnableSwagger2
+//@ComponentScan(basePackageClasses=PaymentTransaction.class)
 public class DabogApplication {
 
 	public static void main(String[] args) {
